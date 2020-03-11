@@ -1,0 +1,32 @@
+﻿<Window x:Class="Cleaner.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Cleaner"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <TabControl>
+            <TabItem  Header="Информация о дисках">
+                <Grid>
+                    <TextBox Grid.Column="1" x:Name="fff"/>
+                    <DataGrid Grid.Column="0" Grid.Row="0" AutoGenerateColumns="False" ItemsSource="{Binding DiskInfos}" CanUserAddRows="False" >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Название" Binding="{Binding Name}"/>
+                            <DataGridTextColumn Header="Тип" Binding="{Binding DriveType}"/>
+                            <DataGridTextColumn Header="Обьем диска" Binding="{Binding TotalSizeGb}"/>
+                            <DataGridTextColumn Header="Свободное пространство" Binding="{Binding TotalFreeSpace}"/>
+                            <DataGridTextColumn Header="Метка" Binding="{Binding VolumeLabel}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="">
+                
+            </TabItem>
+            <TabItem></TabItem>
+            <TabItem></TabItem>
+        </TabControl>
+    </Grid>
+</Window>

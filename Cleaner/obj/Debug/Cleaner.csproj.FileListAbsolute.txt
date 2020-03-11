@@ -1,0 +1,15 @@
+C:\Users\Максим\source\repos\Cleaner\Cleaner\bin\Debug\Cleaner.exe.config
+C:\Users\Максим\source\repos\Cleaner\Cleaner\bin\Debug\Cleaner.exe
+C:\Users\Максим\source\repos\Cleaner\Cleaner\bin\Debug\Cleaner.pdb
+C:\Users\Максим\source\repos\Cleaner\Cleaner\obj\Debug\MainWindow.g.cs
+C:\Users\Максим\source\repos\Cleaner\Cleaner\obj\Debug\App.g.cs
+C:\Users\Максим\source\repos\Cleaner\Cleaner\obj\Debug\Cleaner_MarkupCompile.cache
+C:\Users\Максим\source\repos\Cleaner\Cleaner\obj\Debug\Cleaner_MarkupCompile.lref
+C:\Users\Максим\source\repos\Cleaner\Cleaner\obj\Debug\MainWindow.baml
+C:\Users\Максим\source\repos\Cleaner\Cleaner\obj\Debug\Cleaner.g.resources
+C:\Users\Максим\source\repos\Cleaner\Cleaner\obj\Debug\Cleaner.Properties.Resources.resources
+C:\Users\Максим\source\repos\Cleaner\Cleaner\obj\Debug\Cleaner.csproj.GenerateResource.cache
+C:\Users\Максим\source\repos\Cleaner\Cleaner\obj\Debug\Cleaner.csproj.CoreCompileInputs.cache
+C:\Users\Максим\source\repos\Cleaner\Cleaner\obj\Debug\Cleaner.exe
+C:\Users\Максим\source\repos\Cleaner\Cleaner\obj\Debug\Cleaner.pdb
+C:\Users\Максим\source\repos\Cleaner\Cleaner\obj\Debug\Cleaner.csprojAssemblyReference.cache

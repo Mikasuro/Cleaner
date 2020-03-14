@@ -14,11 +14,13 @@ namespace Cleaner.Model
       
         public DriveType DriveType { get; set; }
         
-        public long TotalFreeSpace { get; set; }
-     
-        public int TotalSize { get; set; }
+        public double TotalFreeSpace { get; set; }
 
-        public int TotalSizeGb { get { return TotalSize / (1024 * 1024 * 1024); } }
+        public double TotalFreeSpaceGb {  get {  return TotalFreeSpace / (1024 * 1024 * 1024); } }
+     
+        public double TotalSize { get; set; }
+
+        public double TotalSizeGb { get { return TotalSize / (1024 * 1024 * 1024); } }
         
         public string VolumeLabel { get; set; }
     }

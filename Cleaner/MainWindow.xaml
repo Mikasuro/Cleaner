@@ -7,26 +7,24 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <TabControl>
-            <TabItem  Header="Информация о дисках">
-                <Grid>
-                    <TextBox Grid.Column="1" x:Name="fff"/>
-                    <DataGrid Grid.Column="0" Grid.Row="0" AutoGenerateColumns="False" ItemsSource="{Binding DiskInfos}" CanUserAddRows="False" >
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Название" Binding="{Binding Name}"/>
-                            <DataGridTextColumn Header="Тип" Binding="{Binding DriveType}"/>
-                            <DataGridTextColumn Header="Обьем диска" Binding="{Binding TotalSizeGb}"/>
-                            <DataGridTextColumn Header="Свободное пространство" Binding="{Binding TotalFreeSpace}"/>
-                            <DataGridTextColumn Header="Метка" Binding="{Binding VolumeLabel}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Grid>
-            </TabItem>
-            <TabItem Header="">
-                
-            </TabItem>
-            <TabItem></TabItem>
-            <TabItem></TabItem>
-        </TabControl>
+        <Grid>
+            <TextBox Grid.Column="1" x:Name="fff"/>
+            <DataGrid Grid.Column="0" Grid.Row="0" AutoGenerateColumns="False" ItemsSource="{Binding DiskInfos}" CanUserAddRows="False" >
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="*"/>
+                    <DataGridTextColumn Header="Тип" Binding="{Binding DriveType}"/>
+                    <DataGridTextColumn Header="Обьем диска" Binding="{Binding Path=TotalSizeGb, StringFormat={}{0:0.00}}"/>
+                    <DataGridTextColumn Header="Свободное пространство" Binding="{Binding Path=TotalFreeSpaceGb, StringFormat={}{0:0.00}}"/>
+                    <DataGridTextColumn Header="Метка" Binding="{Binding VolumeLabel}"/>
+                    <DataGridTemplateColumn Header="Перейти">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Перейти" Click="Button_Click" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
     </Grid>
 </Window>

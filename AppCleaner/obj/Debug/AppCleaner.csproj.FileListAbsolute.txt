@@ -1,5 +1,0 @@
-C:\Users\Максим\source\repos\Cleaner\AppCleaner\obj\Debug\AppCleaner.csprojAssemblyReference.cache
-C:\Users\Максим\source\repos\Cleaner\AppCleaner\obj\Debug\MainWindow.g.cs
-C:\Users\Максим\source\repos\Cleaner\AppCleaner\obj\Debug\App.g.cs
-C:\Users\Максим\source\repos\Cleaner\AppCleaner\obj\Debug\AppCleaner_MarkupCompile.cache
-C:\Users\Максим\source\repos\Cleaner\AppCleaner\obj\Debug\AppCleaner_MarkupCompile.lref

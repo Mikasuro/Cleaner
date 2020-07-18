@@ -41,7 +41,9 @@ namespace Cleaner
             InitializeComponent();
             search.Focus();
             DataContext = this;
+            comboTime.ItemsSource = Enumerable.Range(0, 24).Select(s => string.Format("{0}.00", s));
         }
+        
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -55,7 +57,11 @@ namespace Cleaner
                     Name = fileInf.Name,
                     Length = fileInf.Length
                 };
-                FileInfoss.Add(a);
+
+                if (FileInfoss.FirstOrDefault() == null)
+                {
+                    FileInfoss.Add(a);
+                }
             }
         }
 

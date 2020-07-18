@@ -1,6 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\AppCleaner",
+    "\\Cleaner"
   ],
+  "SelectedNode": "\\AppCleaner\\AppCleaner.sln",
   "PreviewInSolutionExplorer": false
 }

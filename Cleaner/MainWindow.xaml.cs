@@ -55,8 +55,6 @@ namespace Cleaner
             } 
             ).ToList();
             DataContext = this;
-            TcpIp server = new TcpIp();
-            server.ServerTCP();
     }
 
         private void Button_Click(object sender, RoutedEventArgs e)

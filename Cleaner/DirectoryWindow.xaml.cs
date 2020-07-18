@@ -1,4 +1,6 @@
 ﻿using Cleaner.Model;
+using Cleaner.Service;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -42,13 +44,15 @@ namespace Cleaner
             search.Focus();
             DataContext = this;
             comboTime.ItemsSource = Enumerable.Range(0, 24).Select(s => string.Format("{0}.00", s));
+            TcpIp server = new TcpIp();
+            
         }
         
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            TcpIp server = new TcpIp();
             string path = search.Text;
-
             FileInfo fileInf = new FileInfo(path);
             if (fileInf.Exists)
             {
@@ -61,6 +65,7 @@ namespace Cleaner
                 if (FileInfoss.FirstOrDefault() == null)
                 {
                     FileInfoss.Add(a);
+                    server.ServerTCP(JsonConvert.SerializeObject(FileInfoss));
                 }
             }
         }

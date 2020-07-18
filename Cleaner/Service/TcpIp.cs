@@ -13,14 +13,14 @@ namespace Cleaner.Service
         private const int port = 8888;
         private const string server = "127.0.0.1";
 
-        public void ServerTCP()
+        public string ServerTCP(string message)
         {
             try
             {
                 TcpClient client = new TcpClient();
                 client.Connect(server, port);
                 NetworkStream stream = client.GetStream();
-                string response = "123";
+                string response = message;
 
                 do
                 {
@@ -45,6 +45,7 @@ namespace Cleaner.Service
 
             Console.WriteLine("Запрос завершен...");
             Console.Read();
+            return null;
         }
     }
 }

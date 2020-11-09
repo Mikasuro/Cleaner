@@ -15,7 +15,7 @@
             <Button Content="Добавить" HorizontalAlignment="Right" Margin="10" Click="Button_Click"/>
         </StackPanel>
         <StackPanel Height="50" DockPanel.Dock="Bottom"/>
-        <DataGrid ItemsSource="{Binding FileInfoss}" CanUserAddRows="False" IsReadOnly="True" AutoGenerateColumns="True">
+        <DataGrid ItemsSource="{Binding DirectoryInf}" CanUserAddRows="False" IsReadOnly="True" AutoGenerateColumns="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Наименование файла" Width="*" Binding="{Binding Name}"/>
                 <DataGridTemplateColumn Header="Удалить" Width="120">

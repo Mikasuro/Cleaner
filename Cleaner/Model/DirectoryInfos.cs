@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Cleaner.Model
 {
-    public class FileInfos
+    public class DirectoryInfos
     {
         public string Name { get; set; }
 

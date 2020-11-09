@@ -18,7 +18,7 @@ namespace Cleaner
     /// </summary>
     public partial class DirectoryWindow : Window, INotifyPropertyChanged
     {
-        private ObservableCollection<FileInfos> _fileInfos = new ObservableCollection<FileInfos>();
+        private ObservableCollection<DirectoryInfos> _directoryInfos = new ObservableCollection<DirectoryInfos>();
 
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
@@ -28,12 +28,12 @@ namespace Cleaner
         }
         #endregion
 
-        public ObservableCollection<FileInfos> FileInfoss
+        public ObservableCollection<DirectoryInfos> DirectoryInf
         {
-            get => _fileInfos;
+            get => _directoryInfos;
             set
             {
-                _fileInfos = value;
+                _directoryInfos = value;
                 OnPropertyChanged();
             }
         }
@@ -53,32 +53,42 @@ namespace Cleaner
         {
             TcpIp server = new TcpIp();
             string path = search.Text;
-            FileInfo fileInf = new FileInfo(path);
-            if (fileInf.Exists)
+            DirectoryInfo dirInf = new DirectoryInfo(path);
+            if (Directory.Exists(path))
             {
-                var a = new FileInfos()
+                foreach (var item in dirInf.GetDirectories())
                 {
-                    Name = fileInf.Name,
-                    Length = fileInf.Length
-                };
-
-                if (FileInfoss.FirstOrDefault() == null)
-                {
-                    FileInfoss.Add(a);
-                    server.ServerTCP(JsonConvert.SerializeObject(FileInfoss));
+                    var d = new DirectoryInfos()
+                    {
+                        Name = item.Name
+                    };
+                    DirectoryInf.Add(d);
                 }
+                foreach ( var item in dirInf.GetFiles())
+                {
+                    var f = new DirectoryInfos()
+                    {
+                        Name = item.Name,
+                        Length = item.Length
+                    };
+                    DirectoryInf.Add(f);
+                }
+                server.ServerTCP(JsonConvert.SerializeObject(DirectoryInf));
             }
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            var deleted = (sender as Button).DataContext as FileInfos;
-            string path = search.Text;
-            FileInfo fileInf = new FileInfo(path);
-            if (fileInf.Exists)
-            {
-                FileInfoss.Remove(deleted);
-            }
+            var deleted = (sender as Button).DataContext as DirectoryInfos;
+            DirectoryInfo directoryInfo = new DirectoryInfo(search.Text);
+            
+            //var deleted = (sender as Button).DataContext as FileInfos;
+            //string path = search.Text;
+            //FileInfo fileInf = new FileInfo(path);
+            //if (fileInf.Exists)
+            //{
+            //    FileInfoss.Remove(deleted);
+            //}
         }
     }
 }

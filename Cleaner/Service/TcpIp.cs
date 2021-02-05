@@ -5,12 +5,13 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Cleaner.Service
 {
     public class TcpIp
     {
-        private const int port = 8888;
+        private const int port = 8887;
         private const string server = "127.0.0.1";
 
         public string ServerTCP(string message)
@@ -20,17 +21,12 @@ namespace Cleaner.Service
                 TcpClient client = new TcpClient();
                 client.Connect(server, port);
                 NetworkStream stream = client.GetStream();
-                string response = message;
-
                 do
                 {
-                    byte[] data = Encoding.UTF8.GetBytes(response);
+                    byte[] data = Encoding.UTF8.GetBytes(message);
                     stream.Write(data, 0, data.Length);
                 }
                 while (stream.DataAvailable);
-
-                Console.WriteLine(response.ToString());
-
                 stream.Close();
                 client.Close();
             }

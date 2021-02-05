@@ -4,24 +4,36 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Cleaner"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="DirectoryWindow" Height="450" Width="800">
     <DockPanel>
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
             <StackPanel Orientation="Horizontal" Margin="10">
-                <TextBox Width="540" x:Name="search"/>
-                <ComboBox Name="comboTime" Width="100"/>
+                <TextBox Width="435" x:Name="search"/>
+                <xctk:TimePicker Name ="timePicker"  HorizontalAlignment="Center" Width="133" />
+                <DatePicker Name="datePicker1" IsDropDownOpen="False" SelectedDateFormat="Short" />
             </StackPanel>
-            <Button Content="Добавить" HorizontalAlignment="Right" Margin="10" Click="Button_Click"/>
+            <Button Content="Добавить" HorizontalAlignment="Right" Margin="10" Click="Button_Click" Width="76"/>
         </StackPanel>
-        <StackPanel Height="50" DockPanel.Dock="Bottom"/>
+        <StackPanel Orientation="Horizontal" Height="50" DockPanel.Dock="Bottom">
+            <Button Content="Удалить отмеченное" HorizontalAlignment="Left" Margin="10" Click="Button_Click_3"/>
+        </StackPanel>
         <DataGrid ItemsSource="{Binding DirectoryInf}" CanUserAddRows="False" IsReadOnly="True" AutoGenerateColumns="True">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Наименование файла" Width="*" Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="Наименование файла" Width="200" Binding="{Binding Name}"/>
                 <DataGridTemplateColumn Header="Удалить" Width="120">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Content="Удалить" Click="Button_Click_1"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Выделено" Width="120">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox x:Name="checkBox" IsChecked="True" Height="20" Content="Отмечено"
+                                      Checked ="CheckBox_Checked"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

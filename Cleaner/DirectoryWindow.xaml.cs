@@ -8,6 +8,9 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -43,52 +46,96 @@ namespace Cleaner
             InitializeComponent();
             search.Focus();
             DataContext = this;
-            comboTime.ItemsSource = Enumerable.Range(0, 24).Select(s => string.Format("{0}.00", s));
             TcpIp server = new TcpIp();
-            
         }
+        
         
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            TcpIp server = new TcpIp();
-            string path = search.Text;
-            DirectoryInfo dirInf = new DirectoryInfo(path);
-            if (Directory.Exists(path))
+            using (StreamWriter sw = new StreamWriter(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Directory.GetCurrentDirectory())))
+                        + "\\CleanService\\bin\\Debug\\itemSourse.txt", false, System.Text.Encoding.Default))
             {
-                foreach (var item in dirInf.GetDirectories())
-                {
-                    var d = new DirectoryInfos()
-                    {
-                        Name = item.Name
-                    };
-                    DirectoryInf.Add(d);
-                }
-                foreach ( var item in dirInf.GetFiles())
-                {
-                    var f = new DirectoryInfos()
-                    {
-                        Name = item.Name,
-                        Length = item.Length
-                    };
-                    DirectoryInf.Add(f);
-                }
-                server.ServerTCP(JsonConvert.SerializeObject(DirectoryInf));
+                sw.WriteLine(Convert.ToDateTime(datePicker1.SelectedDate.Value).ToString("d") + 
+                    " " + Convert.ToDateTime(timePicker.Value).ToString("T"));
+                sw.Close();
+                SerializeData();
             }
         }
+        ServerMessage SerializeData()
+        {
+            int count = 0;
+            string path = search.Text;
+            try
+            {
+                DirectoryInfo dirInf = new DirectoryInfo(path);
+                ServerMessage serverMessage = new ServerMessage();
+                if (Directory.Exists(path))
+                {
+                    foreach (var item in dirInf.GetDirectories())
+                    {
+                        count++;
+                        var d = new DirectoryInfos()
+                        {
+                            Name = item.Name,
+                            Root = item.Root + item.Parent.ToString()
+                        };
 
+                        DirectoryInf.Add(d);
+                    }
+                    serverMessage.Datas = new Data[count];
+                    foreach (var item in dirInf.GetFiles())
+                    {
+                        count++;
+                        var f = new DirectoryInfos()
+                        {
+                            Name = item.Name,
+                            Length = item.Length,
+                            Root = item.DirectoryName
+
+                        };
+                        DirectoryInf.Add(f);
+
+                    }
+                    serverMessage.Datas = new Data[count];
+                    for (int i = 0; i < count; i++)
+                    {
+                        serverMessage.Datas[i] = new Data()
+                        {
+                            Name = DirectoryInf[i].Name,
+                            Length = DirectoryInf[i].Length,
+                            Root = DirectoryInf[i].Root
+                        };
+                    }
+                }
+                return serverMessage;
+            }
+            catch
+            {
+                MessageBox.Show("Выберите путь!");
+                return null;
+            }
+        }
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             var deleted = (sender as Button).DataContext as DirectoryInfos;
-            DirectoryInfo directoryInfo = new DirectoryInfo(search.Text);
+            if (new DirectoryInfo(search.Text).Exists)
+            {
+                DirectoryInf.Remove(deleted);
+            }
+        }
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+            TcpIp server = new TcpIp();
+            server.ServerTCP(JsonConvert.SerializeObject(SerializeData()));
+            if (new DirectoryInfo(search.Text).Exists)
+            {
+                DirectoryInf.Clear();
+            }
+        }
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
             
-            //var deleted = (sender as Button).DataContext as FileInfos;
-            //string path = search.Text;
-            //FileInfo fileInf = new FileInfo(path);
-            //if (fileInf.Exists)
-            //{
-            //    FileInfoss.Remove(deleted);
-            //}
         }
     }
 }

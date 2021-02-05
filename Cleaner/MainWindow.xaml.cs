@@ -15,7 +15,6 @@ namespace Cleaner
     {
         private List<DiskInfo> _diskInfos;
         private List<DirectoryInfo> _directories;
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         void OnPropertyChanged([CallerMemberName] string propName = "")

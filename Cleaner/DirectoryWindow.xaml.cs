@@ -23,6 +23,8 @@ namespace Cleaner
     {
         private ObservableCollection<DirectoryInfos> _directoryInfos = new ObservableCollection<DirectoryInfos>();
 
+        private List<string> _listDirectory = new List<string>();
+
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
         void OnPropertyChanged([CallerMemberName] string propName = "")
@@ -30,7 +32,7 @@ namespace Cleaner
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
         }
         #endregion
-
+        public string _path;
         public ObservableCollection<DirectoryInfos> DirectoryInf
         {
             get => _directoryInfos;
@@ -46,21 +48,27 @@ namespace Cleaner
             InitializeComponent();
             search.Focus();
             DataContext = this;
-            TcpIp server = new TcpIp();
+            var server = new Server();
+            Thread thread = new Thread(new ThreadStart(() =>
+            {
+                server.SendString(1);
+            }));
         }
         
         
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            using (StreamWriter sw = new StreamWriter(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Directory.GetCurrentDirectory())))
-                        + "\\CleanService\\bin\\Debug\\itemSourse.txt", false, System.Text.Encoding.Default))
-            {
-                sw.WriteLine(Convert.ToDateTime(datePicker1.SelectedDate.Value).ToString("d") + 
-                    " " + Convert.ToDateTime(timePicker.Value).ToString("T"));
-                sw.Close();
-                SerializeData();
-            }
+            //using (StreamWriter sw = new StreamWriter(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Directory.GetCurrentDirectory())))
+            //            + "\\CleanService\\bin\\Debug\\itemSourse.txt", false, System.Text.Encoding.Default))
+            //{
+            //    sw.WriteLine(Convert.ToDateTime(datePicker1.SelectedDate.Value).ToString("d") + 
+            //        " " + Convert.ToDateTime(timePicker.Value).ToString("T"));
+            //    sw.Close();
+            //    SerializeData();
+            //}
+            
+
         }
         ServerMessage SerializeData()
         {
@@ -70,45 +78,45 @@ namespace Cleaner
             {
                 DirectoryInfo dirInf = new DirectoryInfo(path);
                 ServerMessage serverMessage = new ServerMessage();
-                if (Directory.Exists(path))
-                {
-                    foreach (var item in dirInf.GetDirectories())
-                    {
-                        count++;
-                        var d = new DirectoryInfos()
-                        {
-                            Name = item.Name,
-                            Root = item.Root + item.Parent.ToString()
-                        };
+                    //if (Directory.Exists(path))
+                    //{
+                    //    foreach (var item in dirInf.GetDirectories())
+                    //    {
+                    //        count++;
+                    //        var d = new DirectoryInfos()
+                    //        {
+                    //            Name = item.Name,
+                    //            Root = item.Root + item.Parent.ToString()
+                    //        };
 
-                        DirectoryInf.Add(d);
-                    }
-                    serverMessage.Datas = new Data[count];
-                    foreach (var item in dirInf.GetFiles())
-                    {
-                        count++;
-                        var f = new DirectoryInfos()
-                        {
-                            Name = item.Name,
-                            Length = item.Length,
-                            Root = item.DirectoryName
+                    //        DirectoryInf.Add(d);
+                    //    }
+                    //    serverMessage.Datas = new Data[count];
+                    //    foreach (var item in dirInf.GetFiles())
+                    //    {
+                    //        count++;
+                    //        var f = new DirectoryInfos()
+                    //        {
+                    //            Name = item.Name,
+                    //            Length = item.Length,
+                    //            Root = item.DirectoryName
 
-                        };
-                        DirectoryInf.Add(f);
+                    //        };
+                    //        DirectoryInf.Add(f);
 
-                    }
-                    serverMessage.Datas = new Data[count];
-                    for (int i = 0; i < count; i++)
-                    {
-                        serverMessage.Datas[i] = new Data()
-                        {
-                            Name = DirectoryInf[i].Name,
-                            Length = DirectoryInf[i].Length,
-                            Root = DirectoryInf[i].Root
-                        };
-                    }
-                }
-                return serverMessage;
+                    //    }
+                    //    serverMessage.Datas = new Data[count];
+                    //    for (int i = 0; i < count; i++)
+                    //    {
+                    //        serverMessage.Datas[i] = new Data()
+                    //        {
+                    //            Name = DirectoryInf[i].Name,
+                    //            Length = DirectoryInf[i].Length,
+                    //            Root = DirectoryInf[i].Root
+                    //        };
+                    //    }
+                    //}
+                    return serverMessage;
             }
             catch
             {
@@ -126,8 +134,12 @@ namespace Cleaner
         }
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
-            TcpIp server = new TcpIp();
-            server.ServerTCP(JsonConvert.SerializeObject(SerializeData()));
+            Server server = new Server();
+            var str = JsonConvert.SerializeObject(SerializeData());
+            Thread thread = new Thread(new ThreadStart(()=>
+                server.SendString(str)));
+            thread.Start();
+            
             if (new DirectoryInfo(search.Text).Exists)
             {
                 DirectoryInf.Clear();
@@ -136,6 +148,20 @@ namespace Cleaner
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
             
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.FolderBrowserDialog dslg = new System.Windows.Forms.FolderBrowserDialog();
+            dslg.ShowDialog();
+            _path = dslg.SelectedPath;
+            DirectoryInfo dirInf = new DirectoryInfo(_path);
+            var directoryInfos = new DirectoryInfos()
+            {
+                Name = dirInf.Name,
+                Root = dirInf.Root + dirInf.Parent.ToString()
+            };
+            DirectoryInf.Add(directoryInfos);
         }
     }
 }

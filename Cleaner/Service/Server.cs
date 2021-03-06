@@ -9,13 +9,14 @@ using System.Windows;
 
 namespace Cleaner.Service
 {
-    public class TcpIp
+    public class Server
     {
         private const int port = 8887;
         private const string server = "127.0.0.1";
 
-        public string ServerTCP(string message)
+        public string SendString(object str)
         {
+            string message = str as string;
             try
             {
                 TcpClient client = new TcpClient();

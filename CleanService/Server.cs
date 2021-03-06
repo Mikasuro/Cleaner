@@ -24,7 +24,7 @@ namespace CleanService
             TcpListener server = null;
             try
             {
-                IPAddress localAddr = IPAddress.Parse("127.0.0.1");//
+                IPAddress localAddr = IPAddress.Parse("127.0.0.1");
                 server = new TcpListener(localAddr, port);
                 server.Start();
                 while (true)

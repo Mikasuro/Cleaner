@@ -18,6 +18,33 @@ namespace CleanService
     {
         private const int port = 8888;
 
+        public void WorkWithClient(TcpClient client)
+        {
+            NetworkStream stream = client.GetStream();
+            byte[] data = new byte[Int16.MaxValue];
+            int bytes = stream.Read(data, 0, data.Length);
+            string message = Encoding.UTF8.GetString(data, 0, bytes);
+            if (message == "1")
+            {
+                using (FileStream fstream = File.OpenRead(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "\\note.txt"))
+                {
+                    byte[] array = new byte[fstream.Length];
+                    fstream.Read(array, 0, array.Length);
+                    string textFromFile = Encoding.Default.GetString(array);
+                }
+            }
+            var serverMessage = JsonConvert.DeserializeObject<ServerMessage>(message);
+            var path = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "\\itemSourse.txt";
+            using (StreamReader sr = new StreamReader(path))
+            {
+                TimeSpan span = Convert.ToDateTime(sr.ReadToEnd()).Subtract(DateTime.Now);
+                Thread.Sleep(span);
+                DeleteFiles.DeleteFile(message);
+                sr.Close();
+            }
+            stream.Close();
+        }
+
         public void ServerStart()
         {
             Debugger.Launch();
@@ -30,21 +57,7 @@ namespace CleanService
                 while (true)
                 {
                     TcpClient client = server.AcceptTcpClient();
-                    NetworkStream stream = client.GetStream();
-                    byte[] data = new byte[Int16.MaxValue];
-                    int bytes = stream.Read(data, 0, data.Length);
-                    string message = Encoding.UTF8.GetString(data, 0, bytes);
-                    var serverMessage = JsonConvert.DeserializeObject<ServerMessage>(message);
-                    var path = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "\\itemSourse.txt";
-                    using (StreamReader sr = new StreamReader(path))
-                    { 
-                        TimeSpan span = Convert.ToDateTime(sr.ReadToEnd()).Subtract(DateTime.Now);
-                        Thread.Sleep(span);
-                        DeleteFiles.DeleteFile(message);
-                        sr.Close();
-                    }
-                    stream.Close();
-                    client.Close();
+                    Thread thread = new Thread(new ThreadStart(() => WorkWithClient(client)));
                 }
             }
             catch (Exception e)

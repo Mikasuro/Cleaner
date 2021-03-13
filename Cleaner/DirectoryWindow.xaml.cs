@@ -48,11 +48,6 @@ namespace Cleaner
             InitializeComponent();
             search.Focus();
             DataContext = this;
-            var server = new Server();
-            Thread thread = new Thread(new ThreadStart(() =>
-            {
-                server.SendString(1);
-            }));
         }
         
         
@@ -134,12 +129,6 @@ namespace Cleaner
         }
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
-            Server server = new Server();
-            var str = JsonConvert.SerializeObject(SerializeData());
-            Thread thread = new Thread(new ThreadStart(()=>
-                server.SendString(str)));
-            thread.Start();
-            
             if (new DirectoryInfo(search.Text).Exists)
             {
                 DirectoryInf.Clear();
@@ -162,6 +151,14 @@ namespace Cleaner
                 Root = dirInf.Root + dirInf.Parent.ToString()
             };
             DirectoryInf.Add(directoryInfos);
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            Server server = new Server();
+            Thread thread = new Thread(new ThreadStart(() =>
+                server.SendString("1")));
+            thread.Start();
         }
     }
 }

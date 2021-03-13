@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Cleaner",
+    "\\TCP"
   ],
-  "SelectedNode": "\\Cleaner.sln",
+  "SelectedNode": "\\Cleaner\\Cleaner.sln",
   "PreviewInSolutionExplorer": false
 }

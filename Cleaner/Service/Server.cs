@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -14,9 +15,10 @@ namespace Cleaner.Service
         private const int port = 8887;
         private const string server = "127.0.0.1";
 
-        public string SendString(object str)
+        public string SendString(object str, object json)
         {
             string message = str as string;
+            string serverMessage = null;
             try
             {
                 TcpClient client = new TcpClient();
@@ -26,6 +28,11 @@ namespace Cleaner.Service
                 {
                     byte[] data = Encoding.UTF8.GetBytes(message);
                     stream.Write(data, 0, data.Length);
+                    byte[] dataRead = new byte[Int16.MaxValue];
+                    int bytes = stream.Read(dataRead, 0, dataRead.Length);
+                    serverMessage = Encoding.UTF8.GetString(dataRead, 0, bytes);
+                    byte[] directories = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(json));
+                    stream.Write(directories, 0, directories.Length);
                 }
                 while (stream.DataAvailable);
                 stream.Close();
@@ -39,10 +46,7 @@ namespace Cleaner.Service
             {
                 Console.WriteLine("Exception: {0}", e.Message);
             }
-
-            Console.WriteLine("Запрос завершен...");
-            Console.Read();
-            return null;
+            return serverMessage;
         }
     }
 }

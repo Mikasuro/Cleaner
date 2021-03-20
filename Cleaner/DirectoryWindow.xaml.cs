@@ -122,18 +122,18 @@ namespace Cleaner
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             var deleted = (sender as Button).DataContext as DirectoryInfos;
-            if (new DirectoryInfo(search.Text).Exists)
-            {
-                DirectoryInf.Remove(deleted);
-            }
+            DirectoryInf.Remove(deleted);
         }
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
-            if (new DirectoryInfo(search.Text).Exists)
+            Server server = new Server();
+            Thread thread = new Thread(new ThreadStart(() =>
             {
-                DirectoryInf.Clear();
-            }
+                server.SendString("2", DirectoryInf);
+            }));
+            thread.Start();
         }
+
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
             
@@ -147,8 +147,7 @@ namespace Cleaner
             DirectoryInfo dirInf = new DirectoryInfo(_path);
             var directoryInfos = new DirectoryInfos()
             {
-                Name = dirInf.Name,
-                Root = dirInf.Root + dirInf.Parent.ToString()
+                Name = dirInf.Name
             };
             DirectoryInf.Add(directoryInfos);
         }
@@ -157,7 +156,22 @@ namespace Cleaner
         {
             Server server = new Server();
             Thread thread = new Thread(new ThreadStart(() =>
-                server.SendString("1")));
+                {
+                    string result = server.SendString("1", null);
+                    Dispatcher.Invoke(() => 
+                    {
+                        var mes = JsonConvert.DeserializeObject<DirectoryList>(result);
+                        foreach(var item in mes.Directories)
+                        {
+                            var f = new DirectoryInfos()
+                            {
+                                Name = item.Name,
+                                Time = item.Time
+                            };
+                            DirectoryInf.Add(f);
+                        }
+                    });
+                }));
             thread.Start();
         }
     }

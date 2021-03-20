@@ -24,14 +24,15 @@ namespace CleanService
             byte[] data = new byte[Int16.MaxValue];
             int bytes = stream.Read(data, 0, data.Length);
             string message = Encoding.UTF8.GetString(data, 0, bytes);
+            byte[] array;
             if (message == "1")
             {
                 using (FileStream fstream = File.OpenRead(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "\\note.txt"))
                 {
-                    byte[] array = new byte[fstream.Length];
+                    array = new byte[fstream.Length];
                     fstream.Read(array, 0, array.Length);
-                    string textFromFile = Encoding.Default.GetString(array);
                 }
+                stream.Write(array, 0, data.Length);
             }
             var serverMessage = JsonConvert.DeserializeObject<ServerMessage>(message);
             var path = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "\\itemSourse.txt";

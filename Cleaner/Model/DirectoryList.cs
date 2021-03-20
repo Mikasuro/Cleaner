@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace Cleaner.Model
 {
-    public class DirectoryInfos
+    public class DirectoryList
+    {
+        public Directories[] Directories { get; set; }
+    }
+    public class Directories
     {
         public string Name { get; set; }
         public string Time { get; set; }

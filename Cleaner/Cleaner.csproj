@@ -77,7 +77,6 @@
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Model\DirectoryList.cs" />
     <Compile Include="Model\ServerMessage.cs" />
     <Compile Include="Service\Server.cs" />
     <Page Include="DirectoryWindow.xaml">

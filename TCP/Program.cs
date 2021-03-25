@@ -62,16 +62,18 @@ namespace TCP
             }
             if (message == "2")
             {
+                string request = "3";
+                string path = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "\\note.txt";
+                var array1 = Encoding.UTF8.GetBytes(request);
+                stream.Write(array1, 0, array1.Length);
                 byte[] dataRead = new byte[Int16.MaxValue];
                 int dataBytes = stream.Read(dataRead, 0, dataRead.Length);
                 string directoriesList = Encoding.UTF8.GetString(dataRead, 0, dataBytes);
-                using (FileStream fstream = new FileStream((Process.GetCurrentProcess().MainModule.FileName) + "\\note.txt", FileMode.OpenOrCreate))
+                if (File.Exists(path))
                 {
-                    byte[] directories = Encoding.Default.GetBytes(directoriesList);
-                    fstream.Write(directories, 0, directories.Length);
+                    File.WriteAllText(path, directoriesList);
                 }
             }
-            stream.Close();
         }
     }
 }

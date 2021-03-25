@@ -26,13 +26,26 @@ namespace Cleaner.Service
                 NetworkStream stream = client.GetStream();
                 do
                 {
-                    byte[] data = Encoding.UTF8.GetBytes(message);
-                    stream.Write(data, 0, data.Length);
-                    byte[] dataRead = new byte[Int16.MaxValue];
-                    int bytes = stream.Read(dataRead, 0, dataRead.Length);
-                    serverMessage = Encoding.UTF8.GetString(dataRead, 0, bytes);
-                    byte[] directories = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(json));
-                    stream.Write(directories, 0, directories.Length);
+                    if (message == "1")
+                    {
+                        byte[] data = Encoding.UTF8.GetBytes(message);
+                        stream.Write(data, 0, data.Length);
+                        byte[] dataRead = new byte[Int16.MaxValue];
+                        int bytes = stream.Read(dataRead, 0, dataRead.Length);
+                        serverMessage = Encoding.UTF8.GetString(dataRead, 0, bytes);
+                    }
+                    if(message == "2")
+                    {
+                        byte[] data1 = Encoding.UTF8.GetBytes(message);
+                        stream.Write(data1, 0, data1.Length);
+                        byte[] dataRead1 = new byte[Int16.MaxValue];
+                        int bytes1 = stream.Read(dataRead1, 0, dataRead1.Length);
+                        if(Encoding.UTF8.GetString(dataRead1, 0, bytes1) == "3")
+                        {
+                            byte[] directories = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(json));
+                            stream.Write(directories, 0, directories.Length);
+                        }
+                    }
                 }
                 while (stream.DataAvailable);
                 stream.Close();

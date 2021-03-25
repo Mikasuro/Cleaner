@@ -7,21 +7,20 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Loaded="Window_Loaded"
-        Title="DirectoryWindow" Height="450" Width="800">
+        Title="DirectoryWindow" Height="450" Width="714.286">
     <DockPanel>
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
             <StackPanel Orientation="Horizontal" Margin="10">
                 <TextBox Width="435" x:Name="search"/>
                 <Button Width="20" Content="..." Click="Button_Click_2" />
                 <xctk:TimePicker Name ="timePicker"  HorizontalAlignment="Center" Width="133" />
-                <DatePicker Name="datePicker1" IsDropDownOpen="False" SelectedDateFormat="Short" />
             </StackPanel>
             <Button Content="Добавить" HorizontalAlignment="Right" Margin="10" Click="Button_Click" Width="76"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Height="50" DockPanel.Dock="Bottom">
             <Button Content="Сохранить" HorizontalAlignment="Left" Margin="10" Click="Button_Click_3"/>
         </StackPanel>
-        <DataGrid ItemsSource="{Binding DirectoryInf}" CanUserAddRows="False" IsReadOnly="True" AutoGenerateColumns="True">
+        <DataGrid x:Name ="dataGrid1"  ItemsSource="{Binding DirectoryInf}" CanUserAddRows="False" IsReadOnly="True" AutoGenerateColumns="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Наименование файла" Width="200" Binding="{Binding Name}"/>
                 <DataGridTemplateColumn Header="Удалить" Width="120">

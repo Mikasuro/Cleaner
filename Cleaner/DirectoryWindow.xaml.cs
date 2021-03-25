@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -54,14 +55,7 @@ namespace Cleaner
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            //using (StreamWriter sw = new StreamWriter(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Directory.GetCurrentDirectory())))
-            //            + "\\CleanService\\bin\\Debug\\itemSourse.txt", false, System.Text.Encoding.Default))
-            //{
-            //    sw.WriteLine(Convert.ToDateTime(datePicker1.SelectedDate.Value).ToString("d") + 
-            //        " " + Convert.ToDateTime(timePicker.Value).ToString("T"));
-            //    sw.Close();
-            //    SerializeData();
-            //}
+            
             
 
         }
@@ -132,6 +126,7 @@ namespace Cleaner
                 server.SendString("2", DirectoryInf);
             }));
             thread.Start();
+            MessageBox.Show("Успешно сохранено");
         }
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
@@ -144,24 +139,31 @@ namespace Cleaner
             System.Windows.Forms.FolderBrowserDialog dslg = new System.Windows.Forms.FolderBrowserDialog();
             dslg.ShowDialog();
             _path = dslg.SelectedPath;
-            DirectoryInfo dirInf = new DirectoryInfo(_path);
-            var directoryInfos = new DirectoryInfos()
+            if (_path != string.Empty)
             {
-                Name = dirInf.Name
-            };
-            DirectoryInf.Add(directoryInfos);
+                DirectoryInfo dirInf = new DirectoryInfo(_path);
+                var directoryInfos = new DirectoryInfos()
+                {
+                    Name = dirInf.Name,
+                    Time = Convert.ToDateTime(timePicker.Value).ToString("t")
+                };
+                DirectoryInf.Add(directoryInfos);
+            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            dataGrid1.Columns[3].Visibility = Visibility.Hidden;
+            dataGrid1.Columns[4].Header = "Время";
+            timePicker.Value = DateTime.Now;
             Server server = new Server();
             Thread thread = new Thread(new ThreadStart(() =>
                 {
-                    string result = server.SendString("1", null);
+                    string result = server.SendString("1",DirectoryInf);
                     Dispatcher.Invoke(() => 
                     {
-                        var mes = JsonConvert.DeserializeObject<DirectoryList>(result);
-                        foreach(var item in mes.Directories)
+                        var mes = JsonConvert.DeserializeObject<DirectoryInfos[]>(result);
+                        foreach(var item in mes)
                         {
                             var f = new DirectoryInfos()
                             {

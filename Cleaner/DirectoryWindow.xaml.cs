@@ -24,8 +24,6 @@ namespace Cleaner
     {
         private ObservableCollection<DirectoryInfos> _directoryInfos = new ObservableCollection<DirectoryInfos>();
 
-        private List<string> _listDirectory = new List<string>();
-
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
         void OnPropertyChanged([CallerMemberName] string propName = "")
@@ -145,6 +143,7 @@ namespace Cleaner
                 var directoryInfos = new DirectoryInfos()
                 {
                     Name = dirInf.Name,
+                    Root = _path,
                     Time = Convert.ToDateTime(timePicker.Value).ToString("t")
                 };
                 DirectoryInf.Add(directoryInfos);
@@ -165,12 +164,13 @@ namespace Cleaner
                         var mes = JsonConvert.DeserializeObject<DirectoryInfos[]>(result);
                         foreach(var item in mes)
                         {
-                            var f = new DirectoryInfos()
+                            var directory = new DirectoryInfos()
                             {
                                 Name = item.Name,
-                                Time = item.Time
+                                Time = item.Time,
+                                Root = item.Root
                             };
-                            DirectoryInf.Add(f);
+                            DirectoryInf.Add(directory);
                         }
                     });
                 }));

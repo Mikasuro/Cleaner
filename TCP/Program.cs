@@ -26,6 +26,8 @@ namespace TCP
                 IPAddress localAddr = IPAddress.Parse("127.0.0.1");
                 server = new TcpListener(localAddr, port);
                 server.Start();
+                Thread thread1 = new Thread(new ThreadStart(() => Read()));
+                thread1.Start();
                 while (true)
                 {
                     TcpClient client = server.AcceptTcpClient();
@@ -43,6 +45,15 @@ namespace TCP
                     server.Stop();
             }
         }
+        public static void Read()
+        {
+            while (true)
+            {
+                FileReading file = new FileReading();
+                DeleteFiles.DeleteFile(file.ReadFileList());
+            }
+
+        }
         public static void WorkWithClient(TcpClient client)
         {
             NetworkStream stream = client.GetStream();
@@ -57,7 +68,9 @@ namespace TCP
                 {
                     array = new byte[fstream.Length];
                     fstream.Read(array, 0, array.Length);
+                    fstream.Close();
                 }
+                
                 stream.Write(array, 0, array.Length);
             }
             if (message == "2")

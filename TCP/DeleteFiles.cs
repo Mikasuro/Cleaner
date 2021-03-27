@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -11,27 +12,24 @@ namespace TCP
 {
     class DeleteFiles
     {
-        public static void DeleteFile(string message)
+        public static void DeleteFile(ObservableCollection<DirectoryInfos> directoryInfos)
         {
-            var serverMessage = JsonConvert.DeserializeObject<ServerMessage>(message);
-            foreach (var item in serverMessage.Datas)
+            foreach (var item in directoryInfos)
             {
-                try
+                DirectoryInfo directory = new DirectoryInfo(item.Root);
+                if (Directory.Exists(item.Root))
                 {
-                    if (Directory.Exists(item.Root + "\\" + item.Name))
+                    foreach(FileInfo file in directory.GetFiles())
                     {
-                        Directory.Delete(item.Root + "\\" + item.Name, true);
-                        Console.WriteLine("Каталог удален");
+                        try
+                        {
+                            file.Delete();
+                        }
+                        catch(Exception e)
+                        {
+                            Console.WriteLine("Ошибка при удалении: {0}", e);
+                        }
                     }
-                    if (File.Exists(item.Root + "\\" + item.Name))
-                    {
-                        File.Delete(item.Root + "\\" + item.Name );
-                        Console.WriteLine("Файл удален");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
                 }
             }
         }

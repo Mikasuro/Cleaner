@@ -74,9 +74,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Model\ServerMessage.cs" />
     <Compile Include="Service\Server.cs" />
     <Page Include="DirectoryWindow.xaml">
@@ -90,10 +87,6 @@
     <Compile Include="DirectoryWindow.xaml.cs">
       <DependentUpon>DirectoryWindow.xaml</DependentUpon>
     </Compile>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\DiskInfo.cs" />

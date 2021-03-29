@@ -2,7 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\Cleaner",
-    "\\TCP"
+    "\\Cleaner\\Model",
+    "\\Cleaner\\Properties",
+    "\\Cleaner\\Service",
+    "\\CleanService"
   ],
   "SelectedNode": "\\Cleaner\\Cleaner.sln",
   "PreviewInSolutionExplorer": false

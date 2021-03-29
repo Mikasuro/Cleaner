@@ -1,37 +1,49 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CleanService
 {
     class DeleteFiles
     {
-        public static void DeleteFile(string message)
+        public static void DeleteFile(ObservableCollection<DirectoryInfos> directoryInfos)
         {
-            var serverMessage = JsonConvert.DeserializeObject<ServerMessage>(message);
-            foreach (var item in serverMessage.Datas)
+            foreach (var item in directoryInfos)
             {
-                try
+                DirectoryInfo directory = new DirectoryInfo(item.Root);
+                if (Directory.Exists(item.Root) && item.Time == DateTime.Now.ToString("t"))
                 {
-                    if (Directory.Exists(item.Root + "\\" + item.Name))
+                    foreach (FileInfo file in directory.GetFiles())
                     {
-                        Directory.Delete(item.Root + "\\" + item.Name, true);
-                        Console.WriteLine("Каталог удален");
+                        try
+                        {
+                            file.Delete();
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine("Ошибка при удалении файлов: {0}", e);
+                        }
                     }
-                    if (File.Exists(item.Root + "\\" + item.Name))
+                    foreach (DirectoryInfo dir in directory.GetDirectories())
                     {
-                        File.Delete(item.Root + "\\" + item.Name);
+                        try
+                        {
+                            dir.Delete();
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine("Ошибка при удалении директорий: {0}", e);
+                        }
                     }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
                 }
             }
+            Thread.Sleep(60000);
         }
     }
 }

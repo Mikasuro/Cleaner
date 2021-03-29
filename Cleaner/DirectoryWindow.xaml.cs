@@ -48,74 +48,32 @@ namespace Cleaner
             search.Focus();
             DataContext = this;
         }
-        
-        
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            
-            
-
-        }
-        ServerMessage SerializeData()
-        {
-            int count = 0;
-            string path = search.Text;
-            try
+            if (search.Text != string.Empty)
             {
-                DirectoryInfo dirInf = new DirectoryInfo(path);
-                ServerMessage serverMessage = new ServerMessage();
-                    //if (Directory.Exists(path))
-                    //{
-                    //    foreach (var item in dirInf.GetDirectories())
-                    //    {
-                    //        count++;
-                    //        var d = new DirectoryInfos()
-                    //        {
-                    //            Name = item.Name,
-                    //            Root = item.Root + item.Parent.ToString()
-                    //        };
-
-                    //        DirectoryInf.Add(d);
-                    //    }
-                    //    serverMessage.Datas = new Data[count];
-                    //    foreach (var item in dirInf.GetFiles())
-                    //    {
-                    //        count++;
-                    //        var f = new DirectoryInfos()
-                    //        {
-                    //            Name = item.Name,
-                    //            Length = item.Length,
-                    //            Root = item.DirectoryName
-
-                    //        };
-                    //        DirectoryInf.Add(f);
-
-                    //    }
-                    //    serverMessage.Datas = new Data[count];
-                    //    for (int i = 0; i < count; i++)
-                    //    {
-                    //        serverMessage.Datas[i] = new Data()
-                    //        {
-                    //            Name = DirectoryInf[i].Name,
-                    //            Length = DirectoryInf[i].Length,
-                    //            Root = DirectoryInf[i].Root
-                    //        };
-                    //    }
-                    //}
-                    return serverMessage;
+                DirectoryInfo dirInf = new DirectoryInfo(search.Text);
+                var directoryInfos = new DirectoryInfos()
+                {
+                    Name = dirInf.Name,
+                    Root = search.Text,
+                    Time = Convert.ToDateTime(timePicker.Value).ToString("t")
+                };
+                DirectoryInf.Add(directoryInfos);
             }
-            catch
+            else
             {
-                MessageBox.Show("Выберите путь!");
-                return null;
+                MessageBox.Show("Выберите путь");
             }
         }
+        
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             var deleted = (sender as Button).DataContext as DirectoryInfos;
             DirectoryInf.Remove(deleted);
         }
+
         private void Button_Click_3(object sender, RoutedEventArgs e)
         {
             Server server = new Server();
@@ -146,19 +104,33 @@ namespace Cleaner
                     Root = _path,
                     Time = Convert.ToDateTime(timePicker.Value).ToString("t")
                 };
-                DirectoryInf.Add(directoryInfos);
+
+                if (!DirectoryInf.Contains(directoryInfos))
+                {
+                    DirectoryInf.Add(directoryInfos);
+                }
             }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            dataGrid1.Columns[3].Visibility = Visibility.Hidden;
+            dataGrid1.Columns[2].Visibility = Visibility.Hidden;
+            dataGrid1.Columns[3].Header = "Расположение каталога";
             dataGrid1.Columns[4].Header = "Время";
             timePicker.Value = DateTime.Now;
             Server server = new Server();
             Thread thread = new Thread(new ThreadStart(() =>
                 {
-                    string result = server.SendString("1",DirectoryInf);
+                    string result = string.Empty;
+                    try
+                    {
+                        result = server.SendString("1", DirectoryInf);
+                    }
+                    catch (Exception f)
+                    {
+                        MessageBox.Show(string.Format("Ошибка подключения {0}", f));
+                        
+                    }
                     Dispatcher.Invoke(() => 
                     {
                         var mes = JsonConvert.DeserializeObject<DirectoryInfos[]>(result);
@@ -176,5 +148,7 @@ namespace Cleaner
                 }));
             thread.Start();
         }
+
+        
     }
 }

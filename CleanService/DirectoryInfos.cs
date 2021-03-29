@@ -4,16 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TCP
+namespace CleanService
 {
-    class ServerMessage
-    {
-        public Data[] Datas { get; set; }
-    }
-    class Data
+    public class DirectoryInfos
     {
         public string Name { get; set; }
-        public double Length { get; set; }
+        public string Time { get; set; }
         public string Root { get; set; }
     }
 }

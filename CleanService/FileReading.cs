@@ -10,7 +10,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TCP
+namespace CleanService
 {
     public class FileReading : INotifyPropertyChanged
     {

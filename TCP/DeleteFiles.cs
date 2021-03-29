@@ -1,11 +1,11 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace TCP
@@ -17,7 +17,7 @@ namespace TCP
             foreach (var item in directoryInfos)
             {
                 DirectoryInfo directory = new DirectoryInfo(item.Root);
-                if (Directory.Exists(item.Root))
+                if (Directory.Exists(item.Root) && item.Time == DateTime.Now.ToString("t"))
                 {
                     foreach(FileInfo file in directory.GetFiles())
                     {
@@ -27,11 +27,23 @@ namespace TCP
                         }
                         catch(Exception e)
                         {
-                            Console.WriteLine("Ошибка при удалении: {0}", e);
+                            Console.WriteLine("Ошибка при удалении файлов: {0}", e);
+                        }
+                    }
+                    foreach(DirectoryInfo dir in directory.GetDirectories())
+                    {
+                        try
+                        {
+                            dir.Delete();
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine("Ошибка при удалении директорий: {0}", e);
                         }
                     }
                 }
             }
+            Thread.Sleep(60000);
         }
     }
 }

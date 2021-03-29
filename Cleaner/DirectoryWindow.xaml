@@ -11,7 +11,7 @@
     <DockPanel>
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
             <StackPanel Orientation="Horizontal" Margin="10">
-                <TextBox Width="435" x:Name="search"/>
+                <TextBox Width="435" x:Name="search" />
                 <Button Width="20" Content="..." Click="Button_Click_2" />
                 <xctk:TimePicker Name ="timePicker"  HorizontalAlignment="Center" Width="133" />
             </StackPanel>
@@ -22,19 +22,11 @@
         </StackPanel>
         <DataGrid x:Name ="dataGrid1"  ItemsSource="{Binding DirectoryInf}" CanUserAddRows="False" IsReadOnly="True" AutoGenerateColumns="True">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Наименование файла" Width="200" Binding="{Binding Name}"/>
-                <DataGridTemplateColumn Header="Удалить" Width="120">
+                <DataGridTextColumn Header="Наименование каталога" Width="200" Binding="{Binding Name}"/>
+                <DataGridTemplateColumn Header="Удалить из списка" Width="120">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Content="Удалить" Click="Button_Click_1"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Выделено" Width="120">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <CheckBox x:Name="checkBox" IsChecked="True" Height="20" Content="Отмечено"
-                                      Checked ="CheckBox_Checked"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

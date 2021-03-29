@@ -1,5 +1,4 @@
 ﻿using Cleaner.Model;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -47,12 +46,11 @@ namespace TCP
         }
         public static void Read()
         {
+            FileReading file = new FileReading();
             while (true)
             {
-                FileReading file = new FileReading();
                 DeleteFiles.DeleteFile(file.ReadFileList());
             }
-
         }
         public static void WorkWithClient(TcpClient client)
         {
@@ -70,7 +68,6 @@ namespace TCP
                     fstream.Read(array, 0, array.Length);
                     fstream.Close();
                 }
-                
                 stream.Write(array, 0, array.Length);
             }
             if (message == "2")
